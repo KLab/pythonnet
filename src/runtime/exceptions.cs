@@ -269,7 +269,10 @@ namespace Python.Runtime
             PythonException pe = e as PythonException;
             if (pe != null)
             {
-                Runtime.PyErr_SetObject(pe.PyType, pe.PyValue);
+                Runtime.XIncref(pe.PyType);
+                Runtime.XIncref(pe.PyValue);
+                Runtime.XIncref(pe.PyTB);
+                Runtime.PyErr_Restore(pe.PyType, pe.PyValue, pe.PyTB);
                 return;
             }
 
